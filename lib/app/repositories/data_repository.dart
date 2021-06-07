@@ -1,14 +1,16 @@
 import 'package:EstudoRESTfulAPI/app/repositories/endpoints_data.dart';
 import 'package:EstudoRESTfulAPI/app/services/api.dart';
 import 'package:EstudoRESTfulAPI/app/services/api_service.dart';
+import 'package:EstudoRESTfulAPI/app/services/data_cache_service.dart';
 import 'package:EstudoRESTfulAPI/app/services/endpoint_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 class DataRepository {
-  DataRepository({@required this.apiService});
+  DataRepository({@required this.apiService, @required this.dataCacheService});
 
-  ApiService apiService;
+  final ApiService apiService;
+  final DataCacheService dataCacheService;
   String _accessToken;
 
   Future<T> _getToken<T>({Future<T> Function() onDataGet}) async {
@@ -35,13 +37,18 @@ class DataRepository {
     );
   }
 
-  Future<EndPointsData> getAllEndPoints() async {
-    return await _getToken<EndPointsData>(
-      onDataGet: () => _getAllEndPoints(),
+  EndPointsData getAllEndPointsCachedData() => dataCacheService.loadData();
+
+  Future<EndPointsData> getAllEndPointsData() async {
+    final endPointsData = await _getToken<EndPointsData>(
+      onDataGet: () => _getAllEndPointsData(),
     );
+
+    await dataCacheService.saveData(endPointsData);
+    return endPointsData;
   }
 
-  Future<EndPointsData> _getAllEndPoints() async {
+  Future<EndPointsData> _getAllEndPointsData() async {
     final values = await Future.wait([
       apiService.getEndPointData(
           accessToken: _accessToken, endPoint: EndPoint.cases),
