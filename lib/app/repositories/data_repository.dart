@@ -1,6 +1,7 @@
 import 'package:EstudoRESTfulAPI/app/repositories/endpoints_data.dart';
 import 'package:EstudoRESTfulAPI/app/services/api.dart';
 import 'package:EstudoRESTfulAPI/app/services/api_service.dart';
+import 'package:EstudoRESTfulAPI/app/services/endpoint_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
@@ -27,8 +28,8 @@ class DataRepository {
     }
   }
 
-  Future<int> getEndPointData(EndPoint endPoint) async {
-    return await _getToken<int>(
+  Future<EndPointData> getEndPointData(EndPoint endPoint) async {
+    return await _getToken<EndPointData>(
       onDataGet: () => apiService.getEndPointData(
           accessToken: _accessToken, endPoint: endPoint),
     );

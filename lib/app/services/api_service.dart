@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:EstudoRESTfulAPI/app/services/endpoint_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:EstudoRESTfulAPI/app/services/api.dart';
@@ -28,7 +29,7 @@ class ApiService {
     throw response;
   }
 
-  Future<int> getEndPointData({
+  Future<EndPointData> getEndPointData({
     @required String accessToken,
     @required EndPoint endPoint,
   }) async {
@@ -44,10 +45,12 @@ class ApiService {
       if (data.isNotEmpty) {
         final Map<String, dynamic> endPointdata = data[0];
         final String responseJsonKey = _responseJsonKeys[endPoint];
-        final int result = endPointdata[responseJsonKey];
+        final int value = endPointdata[responseJsonKey];
+        final String dateText = endPointdata['date'];
+        final date = DateTime.tryParse(dateText);
 
-        if (result != null) {
-          return result;
+        if (value != null) {
+          return EndPointData(value: value, date: date);
         }
       }
     }

@@ -1,5 +1,6 @@
 import 'package:EstudoRESTfulAPI/app/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EndPointCardData {
   EndPointCardData({this.title, this.assetName, this.color});
@@ -41,6 +42,46 @@ class EndPointCard extends StatelessWidget {
     ),
   };
 
+  String get formattedValue {
+    if (value == null) {
+      return '';
+    }
+
+    return NumberFormat(getNumberPattern(), 'pt_BR').format(value);
+  }
+
+  String getNumberPattern() {
+    if (value > 999999999) {
+      return '0,000,000,000';
+    }
+    if (value > 99999999) {
+      return '000,000,000';
+    }
+    if (value > 9999999) {
+      return '00,000,000';
+    }
+    if (value > 999999) {
+      return '0,000,000';
+    }
+    if (value > 99999) {
+      return '000,000';
+    }
+    if (value > 9999) {
+      return '00,000';
+    }
+    if (value > 999) {
+      return '0,000';
+    }
+    if (value > 99) {
+      return '000';
+    }
+    if (value > 9) {
+      return '00';
+    }
+
+    return '0';
+  }
+
   @override
   Widget build(BuildContext context) {
     final cardData = _cardsData[endPoint];
@@ -73,7 +114,7 @@ class EndPointCard extends StatelessWidget {
                       color: cardData.color,
                     ),
                     Text(
-                      value != null ? value.toString() : '',
+                      formattedValue,
                       style: Theme.of(context)
                           .textTheme
                           .headline4

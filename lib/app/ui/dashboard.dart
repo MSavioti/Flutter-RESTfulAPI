@@ -2,6 +2,7 @@ import 'package:EstudoRESTfulAPI/app/repositories/data_repository.dart';
 import 'package:EstudoRESTfulAPI/app/repositories/endpoints_data.dart';
 import 'package:EstudoRESTfulAPI/app/services/api.dart';
 import 'package:EstudoRESTfulAPI/app/ui/endpoint_card.dart';
+import 'package:EstudoRESTfulAPI/app/ui/last_updated_status_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,11 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = LastUpdatedDateFormatter(
+      lastUpdated: _endPointsData != null
+          ? _endPointsData.values[EndPoint.cases].date
+          : null,
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Coronavirus Tracker'),
@@ -37,11 +43,14 @@ class _DashboardState extends State<Dashboard> {
         onRefresh: _updateData,
         child: ListView(
           children: [
+            LastUpdatedStatusText(
+              text: formatter.lastUpdatedStatusText(),
+            ),
             for (var endPoint in EndPoint.values)
               EndPointCard(
                 endPoint: endPoint,
                 value: _endPointsData != null
-                    ? _endPointsData.values[endPoint]
+                    ? _endPointsData.values[endPoint].value
                     : null,
               ),
           ],
