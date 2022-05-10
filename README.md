@@ -1,3 +1,3 @@
 # App Flutter RESTful API - COVID-19
 
-Um aplicativo RESTful desenvolvido em Flutter que acessa dados sobre o COVID-19 desenvolvido acompanhando o curso "Flutter REST API Crash Course: Build a Coronavirus App".
+A Flutter app built to show COVID-19 from a RESTful API.
